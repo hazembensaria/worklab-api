@@ -1,10 +1,26 @@
-const express=require("express");
+
 const bcrypt=require("bcrypt");
 const User=require("../Models/user");
 const jwt=require("jsonwebtoken");
 const userVerification=require("../Models/UserVerification")
-const  mongoose  = require("mongoose");
+require("dotenv").config();
+const nodemailer=require("nodemailer");
+const {v4:uuidv4}=require("uuid");
 
+
+//node mailer stuff
+let transporter=nodemailer.createTransport({
+    service: "gmail",
+    auth:{
+        user:process.env.AUTH_EMAIL,
+            pass:process.env.AUTH_PASS
+    }
+});
+ transporter.verify((error,sucess)=>{
+     if (error)
+         console.log("error:"+error)
+     else console.log("ready for message"+sucess);
+ })
 
 
 
@@ -47,7 +63,7 @@ const signUpUser=(req,res,next)=>{
             email:req.body.email,
             password:hash,
             name:req.body.name,
-            verified:false,
+            isVerified:false,
         }).save().then(result=>{
             console.log(result)
             sendVerificationEmail({_id:result._id+"",email:result.email},res);
