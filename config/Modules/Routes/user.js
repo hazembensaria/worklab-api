@@ -13,7 +13,7 @@ route.post("/login",user.loginUser);
 
 route.post("/signUp",user.signUpUser);   
 
-route.get("/verified",user.verified);
+// route.get("/verified",user.verified);
 
 route.get("/verify/:userId/:uniqueString",user.verifiy);
 
