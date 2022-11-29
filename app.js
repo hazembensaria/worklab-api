@@ -3,7 +3,7 @@ const express=require("express");
 const bodyParser=require("body-parser");
 const app=express();
 const  Connection  = require('./config/DBConnection');
-
+const userRoutes=require("./config/Modules/Routes/user.js");
 Connection();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}))
@@ -20,5 +20,7 @@ app.use((req,res,next)=>{
 app.get("/",(req ,res)=>{
     res.send('you are connected')
     console.log("helo")})
+
+app.use("/user",userRoutes);
 
 module.exports = app

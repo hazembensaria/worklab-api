@@ -1,25 +1,23 @@
 const express=require("express");
 
-const loginUser= require('../Controllers/user');
-const signUpUser=require('../Controllers/user');
-const verified=require("../Controllers/user");
-const verify=require("../Controllers/user");
 
+const user=require("../Controllers/user");
+// import {loginUser ,signUpUser , verifiy , verified} from "../Controllers/user"
 
-const route=express.Route();
+const route=express.Router();
 
 
 //-------------------------Login--------------------------------Done
 
-route.post("/login",loginUser);
+route.post("/login",user.loginUser);
 
-route.post("/signUp",signUpUser);   
+route.post("/signUp",user.signUpUser);   
 
-route.get("/verified",);
+route.get("/verified",user.verified);
 
-route.get("/verify/:userId/:uniqueString",);
-
-
+route.get("/verify/:userId/:uniqueString",user.verifiy);
 
 
+
+module.exports = route
 //-------------------------Register --------------------------------ToDo
