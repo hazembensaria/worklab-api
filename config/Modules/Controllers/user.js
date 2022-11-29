@@ -2,6 +2,7 @@
 const bcrypt=require("bcrypt");
 const User=require("../Models/user");
 const jwt=require("jsonwebtoken");
+const path = require("path")
 const userVerification=require("../Models/UserVerification")
 require("dotenv").config();
 const nodemailer=require("nodemailer");
@@ -58,6 +59,9 @@ const loginUser=async(req,res,next)=>{
 
 const signUpUser=(req,res,next)=>{
     // console.log('function from sign up')
+   
+    
+    
     bcrypt.hash(req.body.password,10).then(hash=>{
         const user=new User({
             email:req.body.email,
@@ -65,8 +69,11 @@ const signUpUser=(req,res,next)=>{
             name:req.body.name,
             isVerified:false,
         }).save().then(result=>{
-            console.log(result)
-            sendVerificationEmail({_id:result._id+"",email:result.email},res);
+            const cuurentUrl = "http://localhost:4000/";
+            const subject = "verify your email";
+            const html = `<p>verify your email to complete the signup and login into your account</p>
+    <p>this link <b>expire in 6 hours</b></p><p>press<a href=${cuurentUrl + "user/verify/" + result._id +"/"+ result._id}>here</a> to proceed</p>`;
+            sendVerificationEmail({_id:result._id+"",email:result.email},res,{subject ,html});
         }).catch(error=>{
         console.log(error)
         {res.status(400).json({message:"oups we can't add user somthing went wrong!"})}})
@@ -76,15 +83,14 @@ const signUpUser=(req,res,next)=>{
 
 //------------------------sendMail Verification------------------------------------------------------------------
 
-const  sendVerificationEmail=({_id,email},res)=> {
-    const cuurentUrl = "http://localhost:4000/";
+const  sendVerificationEmail=({_id,email},res , {subject , html})=> {
+   
     const uniqueString =  _id;//maybe worng na7i el faza eli 3malha hoia nta3 el uuid deja mat9al9ch blch biha
     const mailOptions = {
         from: process.env.AUTH_EMAIL,
         to: email,
-        subject: "verify your email",
-        html: `<p>verify your email to complete the signup and login into your account</p>
-    <p>this link <b>expire in 6 hours</b></p><p>press<a href=${cuurentUrl + "api/user/verify/" + _id +"/"+ uniqueString}>here</a> to proceed</p>`
+        subject: subject,
+        html: html
     }
 
     const salRounds = 10;
@@ -134,11 +140,20 @@ const  sendVerificationEmail=({_id,email},res)=> {
             })
         ;
 }
+// -------------------------------reset password --------------------------
+const resetPassword = (req,res)=>{
+    let {email} = req.body;
+    User.findOne({email}).then(user=>{
+        if(!user){
+            return res.status(404).send("user not found");
+        }
+        
+    })
+}
 
 
 
-
-//--------------------------------lsjdflkj-------------------------------
+//--------------------------------verifiy-------------------------------
 
 const verifiy= (req,res)=>{
     let {userId,uniqueString}=req.params;
@@ -155,18 +170,18 @@ const verifiy= (req,res)=>{
                             User.deleteOne({_id:userId})
                                 .then(()=>{
                                     let message= "user deleted please sign up again  ";
-                                    res.redirect(`/api/user/verified?error=true&message=${message}`)
+                                    res.redirect(`user/verified?error=true&message=${message}`)
                                 })
                                 .catch(error=>{
                                 console.log("error:can't delet user  "+error);
                                     let message= "clearing user with unique string failed ";
-                                    res.redirect(`/api/user/verified?error=true&message=${message}`)
+                                    res.redirect(`user/verified?error=true&message=${message}`)
                             })
                         })
                         .catch((error)=>{
                             console.log(error);
                             let message= "An error occured while clearing expired user verification record ";
-                            res.redirect(`/api/user/verified?error=true&message=${message}`)
+                            res.redirect(`user/verified?error=true&message=${message}`)
                         })
 
                 }else {
@@ -174,36 +189,41 @@ const verifiy= (req,res)=>{
                         .then((result)=>{
                             console.log("res2:"+result)
                             if (result){
-                                User.updateOne({_id:userId},{verified:true})
+                                User.updateOne({_id:userId},{isVerified:true})
                                     .then(()=>{
-                                        console.log("updated3");
-                                        res.sendFile(path.join(__dirname,"../views/verified.html"));
-                                        //res.redirect(`/api/user/verified?id=${userId}`)
-                                        console.log("is that her the fucking errror!");
+                                        userVerification.deleteOne({userId}).then(userverif=>{
+                                            console.log("updated3");
+                                            res.sendFile(path.join(__dirname,"../views/verified.html"));
+                                            //res.redirect(`/api/user/verified?id=${userId}`)
+                                            console.log("is that her the fucking errror!");
+                                        }).catch(error=>{
+                                            console.log("there is a problem while deleting verifuser !")
+                                        })
+                                      
                                     })
                                     .catch(error=>{
                                         let message= "an error occured while updating user to verified";
-                                        res.redirect(`/api/user/verified?error=true&message=${message}`)
+                                        res.redirect(`user/verified?error=true&message=${message}`)
                                     })
                             }else{
                                 let message= "invalid validation of unique string . check your inbox";
-                                res.redirect(`/api/user/verified?error=true&message=${message}`)
+                                res.redirect(`user/verified?error=true&message=${message}`)
                             }
                         })
                         .catch(error=>{
                             let message= "an error occured while comparing the unique string";
-                            res.redirect(`/api/user/verified?error=true&message=${message}`)
+                            res.redirect(`user/verified?error=true&message=${message}`)
                         })
                 }
             }else {
                 let message= "account doesn't exist or has been verified already";
-                res.redirect(`/api/user/verified?error=true&message=${message}`)
+                res.redirect(`user/verified?error=true&message=${message}`)
             }
         })
         .catch(error=>{
             console.log(error)
             let message= "An error occured while checking for existing user";
-            res.redirect(`/api/user/verified?error=true&message=${message}`)
+            res.redirect(`user/verified?error=true&message=${message}`)
 
         });
 }
