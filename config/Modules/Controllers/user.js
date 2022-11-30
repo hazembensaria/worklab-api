@@ -147,10 +147,51 @@ const resetPassword = (req,res)=>{
         if(!user){
             return res.status(404).send("user not found");
         }
+
+        const cuurentUrl = "http://localhost:4200/";
+            const subject = "verify your email";
+            const html = `<p>you forgot your password !</p>
+    <p>this link <b>expire in 6 hours</b></p><p>press<a href=${cuurentUrl + "user/reset/"+user._id}>here</a> to reset your password </p>`;
+    sendResetPasswordMail(email,{subject,html},res);
         
     })
 }
 
+//-----------------------------------Set New Pass ------------------------
+
+    const setNewpass=(req,res)=>{
+        console.log("setNewpss");
+        let {password,id}=req.body;
+        User.findOne({_id:id}).then(user=>{
+            if(!user){
+                console.log("user not found !");
+                res.status(404).json({message:"user not found"})
+            }
+
+            bcrypt.hash(password,10).then(hash=>{
+                console.log("user hashed");
+                User.updateOne({_id:user._id},{password:hash})
+                .then(resp=>{
+
+                    console.log("password reset sucessfuly");
+                    res.status(200).json({
+                        message:"password reset sucessfuly !"
+                    })
+                }).catch (err=>{
+                        res.status(400).json({
+                            message:"error while updating user's password"
+                        })
+                })
+
+            })
+
+            
+        }).catch(err=>{
+            res.status(400).json({
+                message:err
+            })
+        })
+    }
 
 
 //--------------------------------verifiy-------------------------------
@@ -237,6 +278,42 @@ const verified=(req,res)=>{
 }
 
 
+//-----------------------send Reset Password Mail ------------------
 
 
-module.exports={loginUser,signUpUser,verified,verifiy}
+const sendResetPasswordMail = (email,{subject,html},res)=>{
+
+    const mailOptions = {
+        from: process.env.AUTH_EMAIL,
+        to: email,
+        subject: subject,
+        html: html
+    }
+
+    transporter.sendMail(mailOptions)
+                            .then(() => {
+                                res.json({
+                                    status: "pending",
+                                    message: "Reset mail sent secessfuly "
+                                })
+
+                            })
+                            .catch(error => {
+                                console.log(error)
+                                res.json({
+                                    status: "failed",
+                                    message: "something went wrong while transport data "
+                                })
+                            })
+
+}
+
+
+
+
+
+
+
+
+
+module.exports={loginUser,signUpUser,verified,verifiy,resetPassword,setNewpass}

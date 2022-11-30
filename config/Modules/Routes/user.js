@@ -7,17 +7,20 @@ const user=require("../Controllers/user");
 const route=express.Router();
 
 
-//-------------------------Login--------------------------------Done
+
 
 route.post("/login",user.loginUser);
 
 route.post("/signUp",user.signUpUser);   
 
-// route.get("/verified",user.verified);
+route.post("/reset",user.resetPassword);
+
+route.post("/setNewPass",user.setNewpass)
+
+route.get("/verified",user.verified);
 
 route.get("/verify/:userId/:uniqueString",user.verifiy);
 
 
 
 module.exports = route
-//-------------------------Register --------------------------------ToDo
