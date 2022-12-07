@@ -4,6 +4,7 @@ const bodyParser=require("body-parser");
 const app=express();
 const  Connection  = require('./config/DBConnection');
 const userRoutes=require("./config/Modules/Routes/user.js");
+const compilerRoutes=require("./config/Modules/Routes/compiler.js");
 Connection();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}))
@@ -22,5 +23,5 @@ app.get("/",(req ,res)=>{
     console.log("helo")})
 
 app.use("/user",userRoutes);
-
+app.use("/compiler",compilerRoutes);
 module.exports = app

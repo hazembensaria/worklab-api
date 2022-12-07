@@ -1,9 +1,5 @@
 const express=require("express");
-
-
 const user=require("../Controllers/user");
-// import {loginUser ,signUpUser , verifiy , verified} from "../Controllers/user"
-
 const route=express.Router();
 
 
