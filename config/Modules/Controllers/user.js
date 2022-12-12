@@ -308,6 +308,17 @@ const sendResetPasswordMail = (email,{subject,html},res)=>{
 
 }
 
+// ----------------------find the current user and get his credentials--------------------------------------
+ const getCurrentUser =  (req ,res)=>{
+    const id = req.userData.userId;
+   
+    User.findById(id , {name : 1}).then(resul=>{
+       
+        res.json(resul)
+    }, err=>{
+        console.log(err)
+    })
+}
 
 
 
@@ -316,4 +327,5 @@ const sendResetPasswordMail = (email,{subject,html},res)=>{
 
 
 
-module.exports={loginUser,signUpUser,verified,verifiy,resetPassword,setNewpass}
+
+module.exports={loginUser,signUpUser,verified,verifiy,resetPassword,setNewpass , getCurrentUser}
