@@ -1,5 +1,6 @@
 const express=require("express");
 const user=require("../Controllers/user");
+const checkAuth = require("../../../Middlewares/checkAuth")
 const route=express.Router();
 
 
@@ -11,7 +12,9 @@ route.post("/signUp",user.signUpUser);
 
 route.post("/reset",user.resetPassword);
 
-route.post("/setNewPass",user.setNewpass)
+route.post("/setNewPass",user.setNewpass);
+
+route.get("/",checkAuth , user.getCurrentUser);
 
 route.get("/verified",user.verified);
 
