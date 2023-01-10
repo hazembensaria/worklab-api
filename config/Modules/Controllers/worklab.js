@@ -51,4 +51,31 @@ Worklab.updateOne({_id: req.body.worklabId} , {$push : {participants : {name : r
 })
 }
 
-module.exports={create , getWorklab , join , addParticipant}
+const addMessage =(req ,res)=>{
+    const message ={
+        msg : req.body.message ,
+        name :req.body.name ,
+        sender : req.userData.userId,
+        date : new Date()
+    }
+
+    Worklab.updateOne({_id : req.body.id} , {$push: {chat : message}}).then(updt=>{
+        res.status(201).send(updt);
+    }).catch(err=>{
+        console.log(err);
+    })
+
+}
+
+
+const saveCode = (req , res)=>{
+    Worklab.updateOne({ _id: req.body.id }, { $set: { code: req.body.code} }).then(result => {
+
+        res.status(200).send(result)
+    })
+        .catch(err => {
+            console.log('ici c l erreure' + err)
+        })
+}
+
+module.exports={create , getWorklab , join , addParticipant ,addMessage , saveCode}

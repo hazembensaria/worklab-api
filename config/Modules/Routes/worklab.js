@@ -10,5 +10,8 @@ route.post("/create",checkAuth,worklab.create);
 route.post("/join",checkAuth,worklab.join);
 route.post("/getWorklab",checkAuth,worklab.getWorklab);
 route.post("/addParticipant",checkAuth,worklab.addParticipant);
+route.post("/addMessage",checkAuth,worklab.addMessage);
+route.post("/saveCode",checkAuth,worklab.saveCode);
+
 
 module.exports = route
