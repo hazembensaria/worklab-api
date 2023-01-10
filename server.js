@@ -52,6 +52,9 @@ const addNewUser = (clientId , socketId)=>{
         console.log(res.auther);
         if(recever)
         io.to(recever.socketId).emit('accept' , {participantName :obj.name , participantId : obj.userId , worklabId : res._id})
+        else{
+            console.log("user not connected")
+        }
        })
         // for(let rec of obj.collab){
             
@@ -60,6 +63,7 @@ const addNewUser = (clientId , socketId)=>{
         //     if(recever)
         // io.to(recever.socketId).emit('getArticleUpdated' , {title :obj.title , section : obj.section})
         // }
+
     })
 
     socket.on('accept',(obj)=>{
@@ -74,5 +78,96 @@ const addNewUser = (clientId , socketId)=>{
         //     if(recever)
         // io.to(recever.socketId).emit('getArticleUpdated' , {title :obj.title , section : obj.section})
         // }
+    })
+
+
+    socket.on('code',(obj)=>{
+        //  console.log(obj)
+        // const recever = getUser(obj.auther)
+        // if(recever)
+        // io.to(recever.socketId).emit('getCode' , {msg : obj.code});
+     
+        for(let rec of obj.auther){
+            // console.log(rec)
+            const recever = getUser(rec.id)
+            // console.log(recever)
+            if(recever)
+        io.to(recever.socketId).emit('getCode' , {msg : obj.code})
+        }
+    })
+    socket.on('sendMessage',(obj)=>{
+        // console.log(obj)
+       // const recever = getUser(obj.auther)
+       // if(recever)
+       // io.to(recever.socketId).emit('getCode' , {msg : obj.code});
+    
+       for(let rec of obj.auther){
+        //    console.log(rec)
+           const recever = getUser(rec.id)
+           // console.log(recever)
+           if(recever)
+       io.to(recever.socketId).emit('getMessage' , {msg : obj.message})
+       }
+   })
+   socket.on('sendTyping',(obj)=>{
+    // console.log(obj)
+   // const recever = getUser(obj.auther)
+   // if(recever)
+   // io.to(recever.socketId).emit('getCode' , {msg : obj.code});
+
+   for(let rec of obj.auther){
+    //    console.log(rec)
+       const recever = getUser(rec.id)
+       // console.log(recever)
+       if(recever)
+   io.to(recever.socketId).emit('getTyping' , {msg : obj.message})
+   }
+})
+socket.on('deleteTyping',(obj)=>{
+    // console.log(obj)
+   // const recever = getUser(obj.auther)
+   // if(recever)
+   // io.to(recever.socketId).emit('getCode' , {msg : obj.code});
+
+   for(let rec of obj.auther){
+    //    console.log(rec)
+       const recever = getUser(rec.id)
+       // console.log(recever)
+       if(recever)
+   io.to(recever.socketId).emit('getDeleteTyping' , {msg : obj.message})
+   }
+})
+socket.on('anotherOne',(obj)=>{
+    // console.log(obj)
+   // const recever = getUser(obj.auther)
+   // if(recever)
+   // io.to(recever.socketId).emit('getCode' , {msg : obj.code});
+
+   for(let rec of obj.to){
+    //    console.log(rec)
+       const recever = getUser(rec.id)
+       // console.log(recever)
+       if(recever)
+   io.to(recever.socketId).emit('anotherOneAdded' , {msg : "added another one"})
+   }
+})
+   
+    socket.on('executer',(obj)=>{
+        console.log('this is execute methode')
+
+        console.log(obj)
+        console.log('this is execute methode!!!!!!!!!!')
+        // const recever = getUser(obj.auther)
+        // if(recever)
+        // io.to(recever.socketId).emit('getExecuter' , {msg : "hazem ben saria !!"});
+     
+        for(let rec of obj.auther){
+            
+            const recever = getUser(rec.id)
+            console.log('this is ')
+             console.log(recever)
+            if(recever)
+        io.to(recever.socketId).emit('getExecuter'  , {msg : "hazem ben saria !!"})
+        }    
     })
  })
