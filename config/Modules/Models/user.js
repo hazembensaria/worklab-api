@@ -10,5 +10,6 @@ const userSchema=mongosse.Schema({
    
 
 })
+
 userSchema.plugin(UniqueValidator);
 module.exports=mongosse.model("User",userSchema);
