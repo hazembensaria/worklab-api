@@ -170,4 +170,45 @@ socket.on('anotherOne',(obj)=>{
         io.to(recever.socketId).emit('getExecuter'  , {msg : "hazem ben saria !!"})
         }    
     })
+
+    socket.on('enable',(obj)=>{
+        console.log('this is execute methode')
+
+        console.log(obj)
+        
+        // const recever = getUser(obj.auther)
+        // if(recever)
+        // io.to(recever.socketId).emit('getExecuter' , {msg : "hazem ben saria !!"});
+     
+        for(let rec of obj.auther){
+            
+            const recever = getUser(rec.id)
+            console.log('this is ')
+             console.log(recever)
+            if(recever)
+        io.to(recever.socketId).emit('enableOk'  , {msg : "hazem ben saria !!"})
+        }    
+    })
+
+    socket.on('denable',(obj)=>{
+        console.log('this is execute methode')
+    
+        console.log(obj)
+        
+        // const recever = getUser(obj.auther)
+        // if(recever)
+        // io.to(recever.socketId).emit('getExecuter' , {msg : "hazem ben saria !!"});
+     
+        for(let rec of obj.auther){
+            
+            const recever = getUser(rec.id)
+            console.log('this is ')
+             console.log(recever)
+            if(recever)
+        io.to(recever.socketId).emit('denableOk'  , {msg : "hazem ben saria !!"})
+        }    
+    })
  })
+
+
+ 
