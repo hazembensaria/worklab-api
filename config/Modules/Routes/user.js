@@ -14,6 +14,8 @@ route.post("/reset",user.resetPassword);
 
 route.post("/setNewPass",user.setNewpass);
 
+route.put("/editProfile",checkAuth,user.updateUser)
+
 route.get("/",checkAuth , user.getCurrentUser);
 
 route.get("/verified",user.verified);
