@@ -312,7 +312,7 @@ const sendResetPasswordMail = (email,{subject,html},res)=>{
  const getCurrentUser =  (req ,res)=>{
     const id = req.userData.userId;
    
-    User.findById(id , {name : 1,email:1}).then(resul=>{
+    User.findById(id , {name : 1,email:1,role:1}).then(resul=>{
        
         res.json(resul)
     }, err=>{

@@ -26,10 +26,11 @@ const addProblem = (req, res, next) => {
         const problem = new Problem({
           description:req.body.problem.description,
           name:req.body.problem.name,
-          difficulty:req.body.problem.difficulty
+          difficulty:req.body.problem.difficulty,
+          category:req.body.problem.category
         }).save().then(problem => {
-          console.log("added succecfuly");
-          return res.status(200).json({ message: "add succecfuly", added: true })
+          console.log("added succecfuly",problem);
+          return res.status(200).json({ message: "add succecfuly", problem:problem })
         }).catch(err => {
           console.log("serv"+err);
           return res.status(500).json({ message: "opps serveur error !", added: false });
@@ -71,4 +72,18 @@ const getProblem=(req,res)=>{
 }
 
 
-module.exports = { addProblem, getProblems ,getProblem}
+//--------------------------add comments---------------------------------------
+
+const addcomment=(req,res)=>{
+  console.log("from add comment");
+  const problemId=req.body.id;
+  const userId=req.userData.userId;
+  const comment=req.body.comment;
+  Problem.updateOne({_id:problemId},{$push:{comments:{comment,authorId:userId}}}).then(result=>{
+    console.log(result);
+    res.status(200).json({rows:result,userId:userId})
+  })
+}
+
+
+module.exports = { addProblem, getProblems ,getProblem,addcomment}

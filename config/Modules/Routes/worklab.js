@@ -15,7 +15,7 @@ route.post("/saveCode",checkAuth,worklab.saveCode);
 route.post("/deleteParticipant",checkAuth,worklab.deleteParticipant);
 
 route.get("/getWorkLabs",checkAuth,worklab.getWorkLabs)
-route.delete("/deleteLab/:id",worklab.deleteLab);
+route.delete("/deleteLab/:id",checkAuth,worklab.deleteLab);
 
 
 module.exports = route
