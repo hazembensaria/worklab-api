@@ -70,16 +70,13 @@ const addNewUser = (clientId , socketId)=>{
         const recever = getUser(obj.id)
         if(recever)
         io.to(recever.socketId).emit('accepted' , {msg : obj.message , worklabId : obj.worklabId});
-     
-        // for(let rec of obj.collab){
-            
-        //     const recever = getUser(rec)
-        //     // console.log(recever)
-        //     if(recever)
-        // io.to(recever.socketId).emit('getArticleUpdated' , {title :obj.title , section : obj.section})
-        // }
     })
 
+    socket.on('remove',(obj)=>{
+        const recever = getUser(obj.id)
+        if(recever)
+        io.to(recever.socketId).emit('removed' , {msg : obj.message , worklabId : obj.worklabId});
+    })
 
     socket.on('code',(obj)=>{
         //  console.log(obj)
