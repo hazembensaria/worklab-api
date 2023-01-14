@@ -12,7 +12,10 @@ route.post("/getWorklab",checkAuth,worklab.getWorklab);
 route.post("/addParticipant",checkAuth,worklab.addParticipant);
 route.post("/addMessage",checkAuth,worklab.addMessage);
 route.post("/saveCode",checkAuth,worklab.saveCode);
+route.post("/deleteParticipant",checkAuth,worklab.deleteParticipant);
+
 route.get("/getWorkLabs",checkAuth,worklab.getWorkLabs)
 route.delete("/deleteLab/:id",worklab.deleteLab);
+
 
 module.exports = route

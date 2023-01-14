@@ -63,6 +63,7 @@ const getProblems = (req, res) => {
 
 const getProblem=(req,res)=>{
   const ProblemId=req.params.id;
+  console.log(ProblemId)
   Problem.findById(ProblemId).then(problem=>{
     return res.status(200).json({message:"problem found",problem:problem});
   }).catch (err=>res.status(404).json({message:"problem not found"}))

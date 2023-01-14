@@ -8,6 +8,7 @@ const worklabSchema=mongosse.Schema({
    createdAt :  { type: Date, default: Date.now },
    chat : Array ,
    code : String,
+   problemId :String,
    sharedCode : { type: Boolean, default: true },
 })
 module.exports=mongosse.model("worklaSchema",worklabSchema);

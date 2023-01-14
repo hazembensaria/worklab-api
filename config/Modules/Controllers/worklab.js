@@ -1,13 +1,15 @@
 
 const worklab = require("../Models/worklab");
 const Worklab=require("../Models/worklab");
+const mongoose=require("mongoose");
+
 const create = (req ,res)=>{
     const worklab=new Worklab({
         auther : req.userData.userId,
         name:req.body.name,
-        
+        problemId: req.body.problemId
     }).save().then(result=>{
-                res.status(200).json(result._id)
+                    res.status(200).json(result._id)
     })
 }
 
@@ -68,7 +70,7 @@ const addMessage =(req ,res)=>{
 
 }
 
-
+// ---------------------------------- save code in worklab--------------------------------------
 const saveCode = (req , res)=>{
     Worklab.updateOne({ _id: req.body.id }, { $set: { code: req.body.code} }).then(result => {
 
@@ -78,6 +80,18 @@ const saveCode = (req , res)=>{
             console.log('ici c l erreure' + err)
         })
 }
+
+
+// ----------------------------- delete participant from worklab -------------------------------------
+
+const deleteParticipant = (req ,res)=>{
+    Worklab.updateOne({_id : req.body.worklabId}, {$pull:{"participants" :{id: req.body.idParticipant}}}).then(deleted=>{
+        res.status(201).send(deleted)
+
+    })
+}
+
+
 
 //-------------------------------get user worklabs ---------------------
 
@@ -106,4 +120,4 @@ const deleteLab=(req,res)=>{
     })
 }
 
-module.exports={create , getWorklab , join , addParticipant ,addMessage , saveCode,getWorkLabs,deleteLab}
+module.exports={create , getWorklab , join , addParticipant ,addMessage , saveCode,getWorkLabs,deleteLab ,deleteParticipant}
