@@ -344,4 +344,7 @@ const updateUser =(req,res)=>{
 
 
 
+
+
+
 module.exports={loginUser,signUpUser,verified,verifiy,resetPassword,setNewpass , getCurrentUser,updateUser}

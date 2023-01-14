@@ -1,4 +1,5 @@
 
+const worklab = require("../Models/worklab");
 const Worklab=require("../Models/worklab");
 const create = (req ,res)=>{
     const worklab=new Worklab({
@@ -78,4 +79,31 @@ const saveCode = (req , res)=>{
         })
 }
 
-module.exports={create , getWorklab , join , addParticipant ,addMessage , saveCode}
+//-------------------------------get user worklabs ---------------------
+
+const getWorkLabs =(req,res)=>{
+    const userId=req.userData.userId;
+    Worklab.find({auther:userId}).then(result=>{
+        res.status(200).json({success:"worklabs here",labs:result})
+
+    }).catch(err=>{
+            res.status(400).json({faild:"fetch faild!"})
+    })
+
+    
+}
+
+//-------------------------------delete lab ----------------------------
+
+const deleteLab=(req,res)=>{
+    const labId=req.params.id
+    console.log("params",req.params);
+
+    worklab.findByIdAndRemove(labId).then(lab=>{
+        res.status(200).json({success:"deleted",lab:lab})
+    }).catch(err=>{
+        res.status(400).json({faild:"can't delete"})
+    })
+}
+
+module.exports={create , getWorklab , join , addParticipant ,addMessage , saveCode,getWorkLabs,deleteLab}
