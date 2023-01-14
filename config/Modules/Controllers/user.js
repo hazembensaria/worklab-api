@@ -48,7 +48,7 @@ const loginUser=async(req,res,next)=>{
                                   "secret_this_should_be_longer",
                                      {expiresIn: "24h"});
     console.log(token)
-    return res.status(201).json({token, id : fetchedUser._id,  role:fetchedUser.role , name : fetchedUser.name});  
+    return res.status(201).json({token, id : fetchedUser._id,  role:fetchedUser.role , name : fetchedUser.name,email:fetchedUser.email});  
 
 }
 
@@ -312,11 +312,28 @@ const sendResetPasswordMail = (email,{subject,html},res)=>{
  const getCurrentUser =  (req ,res)=>{
     const id = req.userData.userId;
    
-    User.findById(id , {name : 1}).then(resul=>{
+    User.findById(id , {name : 1,email:1}).then(resul=>{
        
         res.json(resul)
     }, err=>{
         console.log(err)
+    })
+}
+
+
+//---------------------update user ----------------------------
+
+const updateUser =(req,res)=>{
+    const userId=req.userData.userId;
+    const fieldsToUpdate=req.body;
+    console.log("fieldstoUpdate"+fieldsToUpdate.name);
+    User.findOneAndUpdate({_id:userId},fieldsToUpdate).then(user=>{
+        console.log("updated from updateUser");
+        res.status(201).json({success:"updated",user})
+    }).catch(err=>{
+        
+        res.status(400).json({errorMesssage:"not updated"})
+
     })
 }
 
@@ -328,4 +345,6 @@ const sendResetPasswordMail = (email,{subject,html},res)=>{
 
 
 
-module.exports={loginUser,signUpUser,verified,verifiy,resetPassword,setNewpass , getCurrentUser}
+
+
+module.exports={loginUser,signUpUser,verified,verifiy,resetPassword,setNewpass , getCurrentUser,updateUser}
