@@ -1,10 +1,9 @@
 
 const worklab = require("../Models/worklab");
 const Worklab=require("../Models/worklab");
-const mongoose=require("mongoose");
 
 const create = (req ,res)=>{
-    const worklab=new Worklab({
+    new Worklab({
         auther : req.userData.userId,
         name:req.body.name,
         problemId: req.body.problemId

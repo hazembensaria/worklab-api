@@ -23,7 +23,7 @@ const addProblem = (req, res, next) => {
       else {
         console.log("same pass");
         console.log(req.body.name); 
-        const problem = new Problem({
+        new Problem({
           description:req.body.problem.description,
           name:req.body.problem.name,
           difficulty:req.body.problem.difficulty,

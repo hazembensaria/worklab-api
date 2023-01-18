@@ -6,7 +6,6 @@ const path = require("path")
 const userVerification=require("../Models/UserVerification")
 require("dotenv").config();
 const nodemailer=require("nodemailer");
-const {v4:uuidv4}=require("uuid");
 
 
 //node mailer stuff
@@ -63,7 +62,7 @@ const signUpUser=(req,res,next)=>{
     
     
     bcrypt.hash(req.body.password,10).then(hash=>{
-        const user=new User({
+        new User({
             email:req.body.email,
             password:hash,
             name:req.body.name,
